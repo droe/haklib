@@ -24,6 +24,11 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+# Example use:
+#
+# from haklib.isodt import parse_iso8601
+# print parse_iso8601('2015-03-43 10:01:34 UTC')
+
 import datetime
 import re
 
@@ -48,6 +53,7 @@ TZm = {
 }
 
 # timezone string to datetime.timedelta conversion
+# Supports either +/-XX:XX format or timezone name from TZm dict
 def tzs2td(tzs):
     if tzs in TZm:
         return datetime.timedelta(minutes=TZm[tzs])
@@ -59,7 +65,8 @@ def tzs2td(tzs):
     m = int(tzs[3:5])
     return datetime.timedelta(minutes=(sign*h*60+m))
 
-# Parse ISO8601-ish timestamp string with timezone; microseconds are ignored
+# Parse ISO8601-ish timestamp string with timezone; microseconds are ignored.
+# Returns a timezone-aware datetime in the UTC timezone.
 def parse_iso8601(timestamp):
     stamp = re.sub(r' *?([+-][0-9]+|[A-Z]+)$', "", timestamp)
     zone = re.sub(r'^.*?([+-][0-9]+|[A-Z]+)$', "\\1", timestamp)
