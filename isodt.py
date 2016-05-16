@@ -37,6 +37,7 @@ class UTC(datetime.tzinfo):
         return datetime.timedelta(0)
 
 # List of known timezone names
+# Note that only timezones with fixed UTC offset are supported.
 TZm = {
     'Z':    0,
     'GMT':  0,
@@ -58,7 +59,7 @@ def tzs2td(tzs):
     m = int(tzs[3:5])
     return datetime.timedelta(minutes=(sign*h*60+m))
 
-# Parse ISO 8601 timestamp string with timezone
+# Parse ISO8601-ish timestamp string with timezone; microseconds are ignored
 def parse_iso8601(timestamp):
     stamp = re.sub(r' *?([+-][0-9]+|[A-Z]+)$', "", timestamp)
     zone = re.sub(r'^.*?([+-][0-9]+|[A-Z]+)$', "\\1", timestamp)
@@ -67,9 +68,14 @@ def parse_iso8601(timestamp):
     return dt.replace(tzinfo=UTC())
 
 if __name__ == '__main__':
-    print(parse_iso8601('2016-01-01 01:02:04 +0100'))
-    print(parse_iso8601('2016-01-01 01:02:04 -0100'))
-    print(parse_iso8601('2016-01-01 01:02:04 UTC'))
-    print(parse_iso8601('2016-01-01 01:02:04 CEST'))
-    print(parse_iso8601('2016-01-01 01:02:04.123 CEST'))
+    def _test(dt):
+        refstr = '2016-01-06 08:02:04+00:00'
+        if not str(dt) == refstr:
+            print("%s != %s" % (str(dt), refstr))
+    _test(parse_iso8601('2016-01-06 09:02:04 +0100'))
+    _test(parse_iso8601('2016-01-06 07:02:04 -0100'))
+    _test(parse_iso8601('2016-01-06 08:02:04 UTC'))
+    _test(parse_iso8601('2016-01-06T08:02:04Z'))
+    _test(parse_iso8601('2016-01-06 10:02:04 CEST'))
+    _test(parse_iso8601('2016-01-06 09:02:04.123 CET'))
 
