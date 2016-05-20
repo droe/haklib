@@ -26,8 +26,11 @@
 
 # Usage:
 #
-# from haklib.hexdump import hexdump
-# hexdump(sys.stdin.read())
+# from haklib.hexdump import hexdump_ex
+# hexdump_ex(sys.stdin.read())
+
+def hexify(buf, sep=' '):
+    return sep.join('%02x' % ord(c) for c in buf)
 
 def hexdumpify(data):
     t = iter(data.encode('hex'))
@@ -37,7 +40,25 @@ def hexdumpify(data):
 def hexdump(data):
     print(hexdumpify(data))
 
+def hexdumpify_ex(buf, length=16, replace='.'):
+    FILTER = ''.join([(len(repr(chr(x))) == 3) and chr(x) or replace for x in range(256)])
+    lines = []
+    for c in xrange(0, len(buf), length):
+        bin = buf[c:c+length]
+        hex = ' '.join(["%02x" % ord(x) for x in bin])
+        if len(hex) > 24:
+            hex = "%s %s" % (hex[:24], hex[24:])
+        ascii = ''.join(["%s" % ((ord(x) <= 127 and FILTER[ord(x)]) or replace) for x in bin])
+        lines.append("%08x:  %-*s  |%s|\n" % (c, length*3, hex, ascii))
+    return ''.join(lines)
+
+def hexdump_ex(buf, length=16, replace='.'):
+    print hexdumpify_ex(buf, length, replace)
+
 if __name__ == '__main__':
     import sys
-    hexdump(sys.stdin.read())
+    data = sys.stdin.read()
+    print hexify(data)
+    hexdump(data)
+    hexdump_ex(data)
 
