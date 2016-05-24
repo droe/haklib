@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # vim: set list et ts=8 sts=4 sw=4 ft=python:
 
-# haklib.isodt - ISO 8601 related datetime functionality
+# haklib.dt - missing datetime functionality
 # Copyright (C) 2016, Daniel Roethlisberger <daniel@roe.ch>
 #
 # Redistribution and use in source and binary forms, with or without
@@ -26,8 +26,8 @@
 
 # Example use:
 #
-# from haklib.isodt import parse_iso8601
-# print parse_iso8601('2015-03-43 10:01:34 UTC')
+# import haklib.dt
+# print haklib.dt.parse_iso8601('2015-03-43 10:01:34 UTC')
 
 import datetime
 import re
@@ -74,15 +74,80 @@ def parse_iso8601(timestamp):
     dt = dt - tzs2td(zone)
     return dt.replace(tzinfo=UTC())
 
+# Returns the time difference between now and dt in human readable form as a
+# string of the form "X time-units ago".
+def ago(dt, now=None):
+    if now == None:
+        now = datetime.datetime.utcnow().replace(tzinfo=UTC())
+    secs = int(round((now - dt).total_seconds()))
+    if secs == 0:
+        return 'now'
+    if secs == 1:
+        return 'a second ago'
+    if secs < 60:
+        return '%s seconds ago' % secs
+    mins = int(round(secs / 60))
+    if mins == 1:
+        return 'a minute ago'
+    if mins < 60:
+        return '%s minutes ago' % mins
+    hours = int(round(mins / 60))
+    if hours == 1:
+        return 'an hour ago'
+    if hours < 24:
+        return '%s hours ago' % hours
+    days = int(round(hours / 24))
+    if days == 1:
+        return 'a day ago'
+    if days < 7:
+        return '%s days ago' % days
+    weeks = int(round(days / 7))
+    if weeks == 1:
+        return 'a week ago'
+    if weeks < 5:
+        return '%s weeks ago' % weeks
+    months = int(round(days / 30))
+    if months == 1:
+        return 'a month ago'
+    if months < 12:
+        return '%s months ago' % months
+    years = int(round(days / 365))
+    if years == 1:
+        return 'a year ago'
+    if years < 10:
+        return '%s years ago' % years
+    decas = int(round(years / 10))
+    if decas == 1:
+        return 'a decade ago'
+    if decas < 10:
+        return '%s decades ago' % decas
+    cents = int(round(years / 100))
+    if cents == 1:
+        return 'a century ago'
+    if cents < 10:
+        return '%s centuries ago' % cents
+    mills = int(round(years / 1000))
+    if mills == 1:
+        return 'a millenium ago'
+    if mills < 10:
+        return '%s millenia ago' % mills
+    return 'ages ago'
+
 if __name__ == '__main__':
     def _test(dt):
         refstr = '2016-01-06 08:02:04+00:00'
         if not str(dt) == refstr:
             print("%s != %s" % (str(dt), refstr))
+        print(dt)
     _test(parse_iso8601('2016-01-06 09:02:04 +0100'))
     _test(parse_iso8601('2016-01-06 07:02:04 -0100'))
     _test(parse_iso8601('2016-01-06 08:02:04 UTC'))
     _test(parse_iso8601('2016-01-06T08:02:04Z'))
     _test(parse_iso8601('2016-01-06 10:02:04 CEST'))
     _test(parse_iso8601('2016-01-06 09:02:04.123 CET'))
+    print ago(parse_iso8601('2016-01-06 09:02:04.123 CET'))
+    print ago(parse_iso8601('2015-01-06 09:02:04.123 CET'))
+    print ago(parse_iso8601('1253-01-06 09:02:04.123 CET'))
+    print ago(parse_iso8601('53-01-06 09:02:04.123 CET'))
+
 
