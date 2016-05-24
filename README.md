@@ -1,4 +1,4 @@
-# haklib - library of reusable python hacks
+# haklib - library of possibly reusable python hacks
 
 Copyright (C) 2016, [Daniel Roethlisberger](//daniel.roe.ch/).
 
@@ -20,7 +20,7 @@ functionality that I had to reinvent too many times already.  Everything is
 unpolished, incompletely documented and not for the faint of heart.  No API
 stability guarantees whatsoever.  Scope of the library is basic
 domain-independent functionality that you would expect to be part of a standard
-library.
+library.  It is mainly intended for my own use but feel free to use and extend.
 
 ## Support
 
