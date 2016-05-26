@@ -27,7 +27,7 @@
 # Example use:
 #
 # import haklib.dt
-# print haklib.dt.parse_iso8601('2015-03-43 10:01:34 UTC')
+# print haklib.dt.fromiso8601('2015-03-43 10:01:34 UTC')
 
 import datetime
 import re
@@ -67,12 +67,16 @@ def tzs2td(tzs):
 
 # Parse ISO8601-ish timestamp string with timezone; microseconds are ignored.
 # Returns a timezone-aware datetime in the UTC timezone.
-def parse_iso8601(timestamp):
+def fromiso8601(timestamp):
     stamp = re.sub(r' *?([+-][0-9]+|[A-Z]+)$', "", timestamp)
     zone = re.sub(r'^.*?([+-][0-9]+|[A-Z]+)$', "\\1", timestamp)
     dt = datetime.datetime(*map(int, re.split('\D', stamp)[0:6]))
     dt = dt - tzs2td(zone)
     return dt.replace(tzinfo=UTC())
+
+# Create TZ aware datetime from UNIX epoch
+def fromepoch(epoch):
+    return datetime.datetime.fromtimestamp(epoch, UTC())
 
 # Returns the time difference between now and dt in human readable form as a
 # string of the form "X time-units ago".
@@ -139,15 +143,16 @@ if __name__ == '__main__':
         if not str(dt) == refstr:
             print("%s != %s" % (str(dt), refstr))
         print(dt)
-    _test(parse_iso8601('2016-01-06 09:02:04 +0100'))
-    _test(parse_iso8601('2016-01-06 07:02:04 -0100'))
-    _test(parse_iso8601('2016-01-06 08:02:04 UTC'))
-    _test(parse_iso8601('2016-01-06T08:02:04Z'))
-    _test(parse_iso8601('2016-01-06 10:02:04 CEST'))
-    _test(parse_iso8601('2016-01-06 09:02:04.123 CET'))
-    print ago(parse_iso8601('2016-01-06 09:02:04.123 CET'))
-    print ago(parse_iso8601('2015-01-06 09:02:04.123 CET'))
-    print ago(parse_iso8601('1253-01-06 09:02:04.123 CET'))
-    print ago(parse_iso8601('53-01-06 09:02:04.123 CET'))
+    _test(fromiso8601('2016-01-06 09:02:04 +0100'))
+    _test(fromiso8601('2016-01-06 07:02:04 -0100'))
+    _test(fromiso8601('2016-01-06 08:02:04 UTC'))
+    _test(fromiso8601('2016-01-06T08:02:04Z'))
+    _test(fromiso8601('2016-01-06 10:02:04 CEST'))
+    _test(fromiso8601('2016-01-06 09:02:04.123 CET'))
+    _test(fromepoch(1452067324))
+    print ago(fromiso8601('2016-01-06 09:02:04.123 CET'))
+    print ago(fromiso8601('2015-01-06 09:02:04.123 CET'))
+    print ago(fromiso8601('1253-01-06 09:02:04.123 CET'))
+    print ago(fromiso8601('53-01-06 09:02:04.123 CET'))
 
 
