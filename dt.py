@@ -27,7 +27,7 @@
 # Example use:
 #
 # import haklib.dt
-# print haklib.dt.fromiso8601('2015-03-43 10:01:34 UTC')
+# print(haklib.dt.fromiso8601('2015-03-43 10:01:34 UTC'))
 
 import datetime
 import re
@@ -150,9 +150,9 @@ if __name__ == '__main__':
     _test(fromiso8601('2016-01-06 10:02:04 CEST'))
     _test(fromiso8601('2016-01-06 09:02:04.123 CET'))
     _test(fromepoch(1452067324))
-    print ago(fromiso8601('2016-01-06 09:02:04.123 CET'))
-    print ago(fromiso8601('2015-01-06 09:02:04.123 CET'))
-    print ago(fromiso8601('1253-01-06 09:02:04.123 CET'))
-    print ago(fromiso8601('53-01-06 09:02:04.123 CET'))
+    print(ago(fromiso8601('2016-01-06 09:02:04.123 CET')))
+    print(ago(fromiso8601('2015-01-06 09:02:04.123 CET')))
+    print(ago(fromiso8601('1253-01-06 09:02:04.123 CET')))
+    print(ago(fromiso8601('53-01-06 09:02:04.123 CET')))
 
 

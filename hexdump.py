@@ -53,12 +53,12 @@ def hexdumpify_ex(buf, length=16, replace='.'):
     return ''.join(lines)
 
 def hexdump_ex(buf, length=16, replace='.'):
-    print hexdumpify_ex(buf, length, replace)
+    print(hexdumpify_ex(buf, length, replace))
 
 if __name__ == '__main__':
     import sys
     data = sys.stdin.read()
-    print hexify(data)
+    print(hexify(data))
     hexdump(data)
     hexdump_ex(data)
 
