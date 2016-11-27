@@ -29,13 +29,15 @@
 # from haklib.hexdump import hexdump_ex
 # hexdump_ex(sys.stdin.read())
 
+import binascii
+
 def hexify(buf, sep=' '):
-    return sep.join('%02x' % ord(c) for c in buf)
+    return sep.join('%02x' % c for c in buf)
 
 def hexdumpify(data):
-    t = iter(data.encode('hex'))
-    s = ' '.join(a+b for a,b in zip(t, t))
-    return '\n'.join(s[i:i+3*16] for i in xrange(0, len(s), 3*16))
+    t = binascii.hexlify(data).decode('ascii')
+    s = ' '.join(t[i:i+2] for i in range(0, len(t), 2))
+    return '\n'.join(s[i:i+48] for i in range(0, len(s), 48))
 
 def hexdump(data):
     print(hexdumpify(data))
@@ -43,12 +45,12 @@ def hexdump(data):
 def hexdumpify_ex(buf, length=16, replace='.'):
     FILTER = ''.join([(len(repr(chr(x))) == 3) and chr(x) or replace for x in range(256)])
     lines = []
-    for c in xrange(0, len(buf), length):
+    for c in range(0, len(buf), length):
         bin = buf[c:c+length]
-        hex = ' '.join(["%02x" % ord(x) for x in bin])
+        hex = ' '.join(["%02x" % x for x in bin])
         if len(hex) > 24:
             hex = "%s %s" % (hex[:24], hex[24:])
-        ascii = ''.join(["%s" % ((ord(x) <= 127 and FILTER[ord(x)]) or replace) for x in bin])
+        ascii = ''.join(["%s" % ((x <= 127 and FILTER[x]) or replace) for x in bin])
         lines.append("%08x:  %-*s  |%s|\n" % (c, length*3, hex, ascii))
     return ''.join(lines)
 
@@ -57,7 +59,7 @@ def hexdump_ex(buf, length=16, replace='.'):
 
 if __name__ == '__main__':
     import sys
-    data = sys.stdin.read()
+    data = sys.stdin.buffer.read()
     print(hexify(data))
     hexdump(data)
     hexdump_ex(data)
