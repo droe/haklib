@@ -43,7 +43,7 @@ def hexdump(data):
     print(hexdumpify(data))
 
 def hexdumpify_ex(buf, length=16, replace='.'):
-    FILTER = ''.join([(len(repr(chr(x))) == 3) and chr(x) or replace for x in range(256)])
+    FILTER = ''.join([(len(repr(chr(x))) in [3, 4]) and chr(x) or replace for x in range(256)])
     lines = []
     for c in range(0, len(buf), length):
         bin = buf[c:c+length]
