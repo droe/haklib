@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # vim: set list et ts=8 sts=4 sw=4 ft=python:
 
 # haklib.hexdump - convenient hexdumps
@@ -43,7 +43,7 @@ def hexdump(data):
     print(hexdumpify(data))
 
 def hexdumpify_ex(buf, length=16, replace='.'):
-    FILTER = ''.join([(len(repr(chr(x))) in [3, 4]) and chr(x) or replace for x in range(256)])
+    FILTER = ''.join([(x > 0x1F and x < 0x7F) and chr(x) or replace for x in range(256)])
     lines = []
     for c in range(0, len(buf), length):
         bin = buf[c:c+length]
