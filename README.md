@@ -22,6 +22,16 @@ stability guarantees whatsoever.  Scope of the library is basic
 domain-independent functionality that you would expect to be part of a standard
 library.  It is mainly intended for my own use but feel free to use and extend.
 
+## Modules
+
+-   '''cpdict''' has a case-preserving, case-insensitive dict
+-   '''dt''' has missing datetime functionality such as timezone-aware parsing
+    of ISO 8601 timestamps
+-   '''hexdump''' has various conversions to hex, including the python version
+    of the venerable `hexdump -C`
+-   '''retry''' has a generic retry decorator with exponential backoff and
+    filtering
+
 ## Support
 
 There is no support whatsoever.  No communication except in the form of pull
