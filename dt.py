@@ -2,7 +2,7 @@
 # vim: set list et ts=8 sts=4 sw=4 ft=python:
 
 # haklib.dt - missing datetime functionality
-# Copyright (C) 2016, Daniel Roethlisberger <daniel@roe.ch>
+# Copyright (C) 2016-2017, Daniel Roethlisberger <daniel@roe.ch>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -32,8 +32,10 @@
 import datetime
 import re
 
-# Simple timezone info class for UTC
 class UTC(datetime.tzinfo):
+    """
+    Simple timezone info class for UTC
+    """
     def utcoffset(self, dt):
         return datetime.timedelta(0)
     def tzname(self, dt):
@@ -52,9 +54,11 @@ TZm = {
     # ...
 }
 
-# timezone string to datetime.timedelta conversion
-# Supports either +/-XX:XX format or timezone name from TZm dict
 def tzs2td(tzs):
+    """
+    timezone string to datetime.timedelta conversion
+    Supports either +/-XX:XX format or timezone name from TZm dict
+    """
     if tzs in TZm:
         return datetime.timedelta(minutes=TZm[tzs])
     if tzs[0] == '-':
@@ -65,17 +69,21 @@ def tzs2td(tzs):
     m = int(tzs[3:5])
     return datetime.timedelta(minutes=(sign*h*60+m))
 
-# Parse ISO8601-ish timestamp string with timezone; microseconds are ignored.
-# Returns a timezone-aware datetime in the UTC timezone.
 def fromiso8601(timestamp):
+    """
+    Parse ISO8601-ish timestamp string with timezone; microseconds are ignored.
+    Returns a timezone-aware datetime in the UTC timezone.
+    """
     stamp = re.sub(r' *?([+-][0-9]+|[A-Z]+)$', "", timestamp)
     zone = re.sub(r'^.*?([+-][0-9]+|[A-Z]+)$', "\\1", timestamp)
     dt = datetime.datetime(*map(int, re.split('\D', stamp)[0:6]))
     dt = dt - tzs2td(zone)
     return dt.replace(tzinfo=UTC())
 
-# Create TZ aware datetime from UNIX epoch
 def fromepoch(epoch):
+    """
+    Create TZ aware datetime from UNIX epoch
+    """
     return datetime.datetime.fromtimestamp(epoch, UTC())
 
 def fromdos(dosdt):
@@ -96,9 +104,11 @@ def fromdos(dosdt):
     except ValueError:
         return datetime.datetime(1980, 1, 1, 0, 0, 0)
 
-# Returns the time difference between now and dt in human readable form as a
-# string of the form "X time-units ago".
 def ago(dt, now=None):
+    """
+    Returns the time difference between now and dt in human readable form as a
+    string of the form "X time-units ago".
+    """
     if now == None:
         now = datetime.datetime.utcnow().replace(tzinfo=UTC())
     secs = int(round((now - dt).total_seconds()))
