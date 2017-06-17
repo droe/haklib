@@ -78,6 +78,24 @@ def fromiso8601(timestamp):
 def fromepoch(epoch):
     return datetime.datetime.fromtimestamp(epoch, UTC())
 
+def fromdos(dosdt):
+    """
+    Convert DOS format 32bit timestamp to datetime object.
+    Timestamps with illegal values out of the allowed range are ignored and a
+    datetime object representing 1980-01-01 00:00:00 is returned instead.
+    https://msdn.microsoft.com/en-us/library/9kkf9tah.aspx
+    """
+    try:
+        return datetime.datetime(
+                ((dosdt >> 25) & 0x7F) + 1980,
+                 (dosdt >> 21) & 0x0F,
+                 (dosdt >> 16) & 0x1F,
+                 (dosdt >> 11) & 0x1F,
+                 (dosdt >>  5) & 0x3F,
+                ((dosdt      ) & 0x1F) * 2)
+    except ValueError:
+        return datetime.datetime(1980, 1, 1, 0, 0, 0)
+
 # Returns the time difference between now and dt in human readable form as a
 # string of the form "X time-units ago".
 def ago(dt, now=None):
