@@ -45,3 +45,21 @@ def c_uchar(i):
     """
     return i & 0xFF
 
+def c_rot32(i, n):
+    """
+    Rotate *i* left by *n* bits within the uint32 value range.
+    """
+    return ((i << n) | (i >> (32 - n)))
+
+def c_add32(a, b):
+    """
+    Add *a* and *b* within the uint32 value range.
+    """
+    return (a + b) & 0xFFFFFFFF
+
+def c_sum32(*args):
+    """
+    Add all elements of *args* within the uint32 value range.
+    """
+    return sum(args) & 0xFFFFFFFF
+
