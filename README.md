@@ -1,6 +1,6 @@
 # haklib - library of possibly reusable python hacks
 
-Copyright (C) 2016, [Daniel Roethlisberger](//daniel.roe.ch/).
+Copyright (C) 2016-2017, [Daniel Roethlisberger](//daniel.roe.ch/).
 
 ## Synopsis
 
@@ -24,6 +24,7 @@ library.  It is mainly intended for my own use but feel free to use and extend.
 
 ## Modules
 
+-   **ascii** has functions for ASCII drawing
 -   **c** has helper functions for portins low-level c code to python
 -   **cpdict** has a case-preserving, case-insensitive dict
 -   **dt** has missing datetime functionality such as timezone-aware parsing
