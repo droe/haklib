@@ -29,6 +29,19 @@ import math
 def c_div(q, d):
     """
     Arbitrary signed integer division with c behaviour.
+
+    >>> c_div(10, 3)
+    3
+    >>> c_div(-10, -3)
+    3
+    >>> c_div(-10, 3)
+    -3
+    >>> c_div(10, -3)
+    -3
+    >>> c_div(-11, 0)
+    Traceback (most recent call last):
+        ...
+    ZeroDivisionError:...
     """
     s = int(math.copysign(1, q) * math.copysign(1, d))
     return s * int(abs(q) / abs(d))
@@ -42,24 +55,58 @@ def c_char(i):
 def c_uchar(i):
     """
     Convert arbitrary integer to c unsigned char type range as if casted in c.
+
+    >>> c_uchar(0x12345678)
+    120
+    >>> c_uchar(-123)
+    133
+    >>> c_uchar(-1)
+    255
+    >>> c_uchar(255)
+    255
+    >>> c_uchar(256)
+    0
     """
     return i & 0xFF
 
 def c_rot32(i, n):
     """
     Rotate *i* left by *n* bits within the uint32 value range.
+
+    >>> c_rot32(0xF0000000, 4)
+    15
+    >>> c_rot32(0xF0, -4)
+    15
     """
     return ((i << n) | (i >> (32 - n)))
 
 def c_add32(a, b):
     """
     Add *a* and *b* within the uint32 value range.
+
+    >>> c_add32(0xFFFFFFFF, 1)
+    0
+    >>> c_add32(0xFFFFFFFF, 0xFFFFFFFF)
+    4294967294
     """
     return (a + b) & 0xFFFFFFFF
 
 def c_sum32(*args):
     """
     Add all elements of *args* within the uint32 value range.
+
+    >>> c_sum32(0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF)
+    4294967293
     """
     return sum(args) & 0xFFFFFFFF
+
+
+
+if __name__ == '__main__':
+    import doctest, sys
+    failures, tests = doctest.testmod(optionflags=doctest.ELLIPSIS)
+    if failures > 0:
+        sys.exit(1)
+    else:
+        sys.exit(0)
 
