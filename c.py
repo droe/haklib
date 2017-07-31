@@ -40,13 +40,13 @@ def c_div(q, d):
     s = int(math.copysign(1, q) * math.copysign(1, d))
     return s * int(abs(q) / abs(d))
 
-def c_char(i):
+def c_schar(i):
     """
     Convert arbitrary integer to c signed char type range as if casted in c.
 
-    >>> c_char(0x12345678)
+    >>> c_schar(0x12345678)
     120
-    >>> (c_char(-128), c_char(-129), c_char(127), c_char(128))
+    >>> (c_schar(-128), c_schar(-129), c_schar(127), c_schar(128))
     (-128, 127, 127, -128)
     """
     return ((i + 128) % 256) - 128
