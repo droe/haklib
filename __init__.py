@@ -7,4 +7,5 @@ from . import cpdict
 from . import dt
 from . import hexdump
 from . import retry
+from . import xor
 

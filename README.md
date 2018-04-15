@@ -1,6 +1,6 @@
 # haklib - library of possibly reusable python hacks
 
-Copyright (C) 2016-2017, [Daniel Roethlisberger](//daniel.roe.ch/).
+Copyright (C) 2016-2018, [Daniel Roethlisberger](//daniel.roe.ch/).
 
 ## Synopsis
 
@@ -33,6 +33,7 @@ library.  It is mainly intended for my own use but feel free to use and extend.
     of the venerable `hexdump -C`
 -   **retry** has a generic retry decorator with exponential backoff and
     filtering
+-   **xor** building blocks for breaking XOR encrypted ciphertext
 
 ## Support
 
