@@ -2,7 +2,7 @@
 # vim: set list et ts=8 sts=4 sw=4 ft=python:
 
 # haklib.dt - missing datetime functionality
-# Copyright (C) 2016-2017, Daniel Roethlisberger <daniel@roe.ch>
+# Copyright (C) 2016-2018, Daniel Roethlisberger <daniel@roe.ch>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -85,6 +85,12 @@ def fromepoch(epoch):
     Create TZ aware datetime from UNIX epoch
     """
     return datetime.datetime.fromtimestamp(epoch, UTC())
+
+def utcnow():
+    """
+    Create TZ aware now
+    """
+    return datetime.datetime.utcnow().replace(tzinfo=UTC())
 
 def fromdos(dosdt):
     """
