@@ -92,11 +92,11 @@ def xorattack_kpt(buf, kpts, keylen=None):
     >>> ct = b'abxabcabcwbcab'
     >>> kpts = [b'wrong', b'\\x1b\\x00\\x00\\x1b\\x16']
     >>> for pt, key in xorattack_kpt(ct, kpts):
-    ...   if pt[:2] == '\\x00\\x00':
+    ...   if pt[:2] == b'\\x00\\x00':
     ...     continue
     ...   pt
     ...   break
-    b'\\x00\\x00\\x00\\x00\\x00\\x1b\\x00\\x00\\x1b\\x16\\x00\\x1b\\x00\\x00'
+    b'\\x16\\x00\\x00\\x16\\x00\\x1b\\x16\\x00\\x1b\\x00\\x00\\x1b\\x16\\x00'
     """
     if keylen == None:
         keylen = keylen_ioc(buf[:1024*1024])
