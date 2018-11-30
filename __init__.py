@@ -5,6 +5,7 @@ from . import ascii
 from . import c
 from . import cpdict
 from . import dt
+from . import iter
 from . import hexdump
 from . import retry
 from . import xor

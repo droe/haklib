@@ -31,6 +31,7 @@ library.  It is mainly intended for my own use but feel free to use and extend.
     of ISO 8601 timestamps
 -   **hexdump** has various conversions to hex, including the python version
     of the venerable `hexdump -C`
+-   **iter** has n-wise grouped iterators
 -   **retry** has a generic retry decorator with exponential backoff and
     filtering
 -   **xor** has building blocks for breaking XOR encrypted ciphertext
