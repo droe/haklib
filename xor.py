@@ -101,6 +101,7 @@ def xorattack_kpt(buf, kpts, keylen=None):
     if keylen == None:
         keylen = keylen_ioc(buf[:1024*1024])
     buf_d = xordiff(buf, keylen)
+    keys = set()
     for kpt in kpts:
         kpt_d = xordiff(kpt, keylen)
         matches = [i for i in range(len(buf_d)) if buf_d.startswith(kpt_d, i)]
@@ -112,7 +113,9 @@ def xorattack_kpt(buf, kpts, keylen=None):
             if keyoffset < keylen:
                 key = key[keyoffset:]+key[:keyoffset]
             key = bytes(key)
-            yield (xorcrypt(buf, key), key)
+            if key not in keys:
+                keys.add(key)
+                yield (xorcrypt(buf, key), key)
 
 
 if __name__ == '__main__':
