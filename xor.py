@@ -82,27 +82,35 @@ def xordiff(buf, period):
         out.append(buf[base] ^ buf[base + period])
     return bytes(out)
 
-def xorattack_kpt(buf, kpts, keylen=None):
+def xorattack_kpt(buf, kpts, keylen=None, mindiffs=3):
     """
     Break the XOR key by looking for XOR differentials of known plaintext.
     If key length (period) is not given, it is calculated using the index of
-    coincidence method.
-    Yields candidate (plaintext, key) tuples for examination by the caller.
+    coincidence method.  Known plaintexts that result in fewer than mindiffs
+    effective XOR differentials are silently skipped in order to prevent FPs.
+    Yields candidate (plaintext, key, offset) tuples for examination by the
+    caller.
 
     >>> ct = b'abxabcabcwbcab'
     >>> kpts = [b'wrong', b'\\x1b\\x00\\x00\\x1b\\x16']
-    >>> for pt, key in xorattack_kpt(ct, kpts):
+    >>> for pt, key, offset in xorattack_kpt(ct, kpts, mindiffs=2):
     ...   if pt[:2] == b'\\x00\\x00':
     ...     continue
-    ...   pt
+    ...   print(pt)
+    ...   print(key)
+    ...   print(offset)
     ...   break
     b'\\x16\\x00\\x00\\x16\\x00\\x1b\\x16\\x00\\x1b\\x00\\x00\\x1b\\x16\\x00'
+    b'wbx'
+    8
     """
     if keylen == None:
         keylen = keylen_ioc(buf[:1024*1024])
     buf_d = xordiff(buf, keylen)
     keys = set()
     for kpt in kpts:
+        if len(kpt) < keylen + mindiffs:
+            continue
         kpt_d = xordiff(kpt, keylen)
         matches = [i for i in range(len(buf_d)) if buf_d.startswith(kpt_d, i)]
         for match in matches:
@@ -115,7 +123,7 @@ def xorattack_kpt(buf, kpts, keylen=None):
             key = bytes(key)
             if key not in keys:
                 keys.add(key)
-                yield (xorcrypt(buf, key), key)
+                yield (xorcrypt(buf, key), key, match)
 
 
 if __name__ == '__main__':
