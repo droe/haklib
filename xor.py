@@ -24,6 +24,8 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from itertools import cycle
+
 def xorcrypt(buf, key):
     """
     XOR encrypt/decrypt a buffer with a key.
@@ -35,10 +37,8 @@ def xorcrypt(buf, key):
     """
     if len(key) == 0:
         return buf
-    out = []
-    for i in range(0, len(buf)):
-        out.append(buf[i] ^ key[i % len(key)])
-    return bytes(out)
+    k = cycle(bytearray(key))
+    return bytes(b ^ next(k) for b in bytearray(buf))
 
 def ioc(buf, shift):
     """
