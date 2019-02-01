@@ -37,8 +37,8 @@ def xorcrypt(buf, key):
     """
     if len(key) == 0:
         return buf
-    k = cycle(bytearray(key))
-    return bytes(b ^ next(k) for b in bytearray(buf))
+    k = cycle(key)
+    return bytes(b ^ next(k) for b in buf)
 
 def ioc(buf, shift):
     """
@@ -49,11 +49,7 @@ def ioc(buf, shift):
     2
     """
     assert shift > 0
-    zeroes = 0
-    for i in range(0, len(buf) - shift):
-        if buf[i] ^ buf[i+shift] == 0:
-            zeroes += 1
-    return zeroes
+    return sum(1 for a, b in zip(buf[0:], buf[shift:]) if a ^ b == 0)
 
 def keylen_ioc(buf, shiftrange=(1, 64), limit=0.01):
     """
@@ -77,10 +73,7 @@ def xordiff(buf, period):
     >>> xordiff(b'abcdefg', 3)
     b'\\x05\\x07\\x05\\x03'
     """
-    out = []
-    for base in range(len(buf) - period):
-        out.append(buf[base] ^ buf[base + period])
-    return bytes(out)
+    return bytes(a ^ b for a, b in zip(buf[0:], buf[period:]))
 
 def xorattack_kpt(buf, kpts, keylen=None, mindiffs=3):
     """
