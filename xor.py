@@ -2,7 +2,7 @@
 # vim: set list et ts=8 sts=4 sw=4 ft=python:
 
 # haklib.xor - building blocks for breaking XOR encrypted ciphertext
-# Copyright (C) 2018, Daniel Roethlisberger <daniel@roe.ch>
+# Copyright (C) 2018-2019, Daniel Roethlisberger <daniel@roe.ch>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions

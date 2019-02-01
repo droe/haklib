@@ -1,6 +1,6 @@
 # haklib - library of possibly reusable python hacks
 
-Copyright (C) 2016-2018, [Daniel Roethlisberger](//daniel.roe.ch/).
+Copyright (C) 2016-2019, [Daniel Roethlisberger](//daniel.roe.ch/).
 
 ## Synopsis
 
